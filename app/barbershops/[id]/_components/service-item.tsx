@@ -30,6 +30,7 @@ const ServiceItem = ({ service, isAuthenticated }: ServiceItemProps) => {
               style={{
                 objectFit: "contain",
               }}
+              className="rounded-md"
             />
           </div>
 
