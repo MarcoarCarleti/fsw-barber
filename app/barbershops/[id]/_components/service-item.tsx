@@ -16,11 +16,13 @@ import { Barbershop, Service } from "@prisma/client";
 import { ptBR } from "date-fns/locale";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { generateDayTimeList } from "../_helpers/hours";
 import { format, setHours, setMinutes, sub } from "date-fns";
 import { saveBooking } from "../_actions/save-booking";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface ServiceItemProps {
   barbershop: Barbershop;
@@ -33,10 +35,13 @@ const ServiceItem = ({
   barbershop,
   isAuthenticated,
 }: ServiceItemProps) => {
+  const router = useRouter();
   const { data } = useSession();
+
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
   const [submitIsLoading, setSubmitIsLoading] = useState(false);
+  const [sheetIsOpen, setSheetIsOpen] = useState(false);
 
   const handleDateClick = (date: Date | undefined) => {
     setDate(date);
@@ -70,6 +75,21 @@ const ServiceItem = ({
         babershopId: barbershop.id,
         date: newDate,
         userId: (data?.user as any).id,
+      });
+
+      setSheetIsOpen(false);
+
+      setHour(undefined);
+      setDate(undefined);
+
+      toast("Reserva realizada com sucesso", {
+        description: format(newDate, "'Para' dd 'de' MMMM 'às' HH':'mm'.' ", {
+          locale: ptBR,
+        }),
+        action: {
+          label: "Visualizar",
+          onClick: () => router.push("/bookings"),
+        },
       });
     } catch (err) {
       console.log(err);
@@ -107,7 +127,7 @@ const ServiceItem = ({
                 {formatPrice(service.price)}
               </p>
 
-              <Sheet>
+              <Sheet open={sheetIsOpen} onOpenChange={setSheetIsOpen}>
                 <SheetTrigger asChild>
                   <Button variant="secondary" onClick={handleBookingClick}>
                     Reservar
