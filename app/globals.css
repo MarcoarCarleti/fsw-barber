@@ -45,3 +45,8 @@
     @apply bg-background text-foreground antialiased;
   }
 }
+
+.scroll {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--secondary)) hsl(var(--background));
+}
