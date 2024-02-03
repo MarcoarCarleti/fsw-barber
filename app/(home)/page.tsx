@@ -7,6 +7,9 @@ import { db } from "../_lib/prisma";
 import BarbershopItem from "./_components/barbershop-item";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import { Button } from "../_components/ui/button";
+import { signIn } from "next-auth/react";
+import SignInButton from "./_components/sign-in-button";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -34,15 +37,28 @@ export default async function Home() {
       <Header />
 
       <div className="px-5 pt-5">
-        <h2 className="text-xl">
-          Olá, <span className="font-bold">Usuario</span>
-        </h2>
+        {session?.user ? (
+          <h2 className="text-xl">
+            Olá,{" "}
+            <span className="font-bold">
+              {session.user.name?.split(" ")[0]!}
+            </span>
+          </h2>
+        ) : (
+          <h2 className="text-xl">Olá! Vamos Agendar um corte hoje?</h2>
+        )}
 
         <p className="capitalize text-sm">
           {format(new Date(), "EEEE',' dd 'de' MMMM", {
             locale: ptBR,
           })}
         </p>
+
+        {!session?.user && (
+          <div className="my-3">
+            <SignInButton variant="outline" />
+          </div>
+        )}
       </div>
 
       <div className="px-5 mt-6">
