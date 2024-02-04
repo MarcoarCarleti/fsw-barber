@@ -19,7 +19,7 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
     router.push(`/barbershops/${barbershop.id}`);
   };
   return (
-    <Card className="min-w-full max-w-full rounded-2xl">
+    <Card className="min-w-full max-w-full min-h-[281px] max-h-[281px] rounded-2xl">
       <CardContent className="px-1 py-0 pt-1">
         <div className="relative px-1 w-full h-[159px]">
           <div className="absolute top-2 left-2 z-50">
