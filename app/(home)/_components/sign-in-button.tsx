@@ -7,7 +7,7 @@ import { ReactNode } from "react";
 
 const SignInButton = (props: ButtonProps) => {
   return (
-    <Button {...props} onClick={() => signIn("google")} >
+    <Button {...props} onClick={() => signIn("google")} className="flex gap-2">
       <LogInIcon size={18} />
       Fazer Login
     </Button>
